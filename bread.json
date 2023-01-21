@@ -1,0 +1,48 @@
+{
+  "breads": [
+    {
+      "id": 2,
+      "name": "Artisan",
+      "price": "4.50",
+      "recipe": "Have you ever wanted to master homemade bread? Real, crusty, chewy, delicious bakery-style loaves that taste incredible with dips, soups, sauces, and comforting dinners? This recipe is where you start. This artisan bread is for beginners, but even bread masters will appreciate its flavor and ease. It’s so fresh, so flavorful, and so surprisingly easy because it basically makes itself.",
+      "imagePath": "path"
+    },
+    {
+      "id": 3,
+      "name": "Bread",
+      "price": "3.20",
+      "recipe": "Stir together all of the ingredients (except the cornmeal) in a large bowl, starting with 4 1/2 cups of the flour. Use a sturdy spoon, or your stand mixer equipped with the beater paddle. Mix until everything comes together in a rough, shaggy mass of dough.",
+      "imagePath": "path"
+    },
+    {
+      "name": "chlebek",
+      "price": "2,59",
+      "recipe": "cenny",
+      "imagePath": "path",
+      "id": 6
+    }
+  ],
+  "reviews": [
+    {
+      "id": 2,
+      "text": "maybe not the worst I've ever had but not worth it",
+      "score": 3,
+      "breadId": 2,
+      "Author": "Anna"
+    },
+    {
+      "text": "super partia",
+      "score": "4",
+      "author": "Kuba",
+      "breadId": 2,
+      "id": 5
+    },
+    {
+      "text": "Hejo",
+      "score": "3",
+      "author": "Helga",
+      "breadId": 2,
+      "id": 6
+    }
+  ]
+}
