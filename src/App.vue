@@ -6,13 +6,13 @@
   
 </template>
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
 import Breads from './components/Breads.vue'
- import reviews from './components/reviews.vue'
+import reviews from './components/reviews.vue'
+
 export default {
   name: 'App',
   components: {
-    // HelloWorld,
+    //HelloWorld,
     Breads,
     reviews
   }

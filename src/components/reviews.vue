@@ -4,7 +4,7 @@
   import axios from 'axios'
   
   export default {
-    name: 'Reviews',
+    name: 'reviews-component',
     data() {
       return {
         reviews: [],

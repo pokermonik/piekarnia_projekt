@@ -1,8 +1,18 @@
 <template>
   <div>
+    <div name="Waluta">
+      <label>Wybierz walutę </label>
+      <select id="selectWaluta" ref="selectWaluta" @change="changeMnoznik($event)">
+        <option value="1">PLN</option>
+        <option value="2">USD</option>
+        <option value="3">GBP</option>
+        <option value="4">EUR</option>
+        <option value="5">CHF</option>
+      </select>
+    </div>
     <div v-for="bread in breads" :key="bread.id">
       <h2 v-on:click="setSelectedBread(bread)">{{ bread.name }}</h2>
-      <p>{{ bread.price }}</p>
+      <p>{{ (bread.price*mnoznik).toFixed(2)}}</p>
       <p>{{ bread.recipe }}</p>
       <button v-if="selectedBread === bread" v-on:click="editBread(bread)">Edytuj</button>
       <button v-if="selectedBread === bread" v-on:click="deleteBread(bread)">Usun</button>
@@ -38,9 +48,10 @@
 
 <script>
 import axios from 'axios'
-import Reviews from './reviews.vue'
+
+
 export default {
-  name: 'Breads',
+  name: 'Breads-component',
   data() {
     return {
     breads: [],
@@ -55,6 +66,11 @@ export default {
     text: '',
     score: '',
     Author: '',
+
+
+
+
+    mnoznik:1
     }
   },
   created() {
@@ -68,6 +84,27 @@ export default {
     })
   },
   methods: {
+    changeMnoznik(e)
+    {
+      let waluta =this.$refs.selectWaluta[e.target.value-1].textContent
+      if(waluta=="PLN")
+        {
+          this.mnoznik=1
+        }
+      else
+      {
+        axios.get('https://api.nbp.pl/api/exchangerates/rates/A/'+waluta+'/?format=json')
+        .then(response=>
+        {
+          this.mnoznik=response.data.rates[0].mid
+        })
+        .catch(e=>
+        {
+          this.errors.push(e)
+        })
+      
+    }
+    },
     addBread() {
       axios.post('http://localhost:3000/breads', {
       name: this.name,
@@ -86,6 +123,7 @@ export default {
     deleteBread(bread) {
       axios.delete(`http://localhost:3000/breads/${bread.id}`)
       .then(response => {
+        console.log(response)
         this.breads = this.breads.filter(b => b.id !== bread.id)
         this.selectedBread = null
       })

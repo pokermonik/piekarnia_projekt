@@ -1,18 +1,6 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <div>
-      
-      <p id="testowaCena" ref="testowaCena">5.69</p>
-      
-      <label>Wybierz walutę </label>
-      <select id="selectWaluta" ref="selectWaluta" @change="testkur($event)">
-        <option value="1">PLN</option>
-        <option value="2">USD</option>
-        <option value="3">GBP</option>
-        <option value="4">EUR</option>
-      </select>
-    </div>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -43,7 +31,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+
 
 export default
  {
@@ -52,68 +40,14 @@ export default
   props: {
     msg: String
   },
-  testAPI:()=>(
-  { 
-    ceny:[],
-    kurs:[],
-    errors:[]
-  }),
-
   methods:
   {
-    testkur(e)
-    {
-      let nowaCena
-      let cenaWyjsciowa=this.$refs.testowaCena.textContent
-      let waluta =this.$refs.selectWaluta[e.target.value-1].textContent
-      if(waluta=="PLN")
-        {
-          nowaCena=cenaWyjsciowa/this.kurs
-          this.$refs.testowaCena.textContent=nowaCena
-        }
-      else
-      {
-        axios.get("http://localhost:3000/breads")
-        .then(response=>
-        {
-          console.log(response.data.length)
-          for(let i=0;i<response.data.length;i++)
-          {
-            this.ceny.push(response.data[i].price)
-            console.log(response.data[i].price)
-            console.log(this.ceny[i])
-          }
-          
-        }
-        
-        )
-        
-      
-        axios.get('https://api.nbp.pl/api/exchangerates/rates/A/'+waluta+'/?format=json')
-        .then(response=>
-        {
-          this.ceny=response.data.rates[0].mid
-        
-          nowaCena=this.ceny*cenaWyjsciowa
-          this.kurs=this.ceny
-          
-          this.$refs.testowaCena.textContent=nowaCena
-        })
-        .catch(e=>
-        {
-          this.errors.push(e)
-        })
-      }
+    
       
       
     
-    }
-  },
-  mounted()
-  
-  {
- 
-  },
+    
+  }
 }
 </script>
 
