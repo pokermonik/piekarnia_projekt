@@ -12,7 +12,7 @@
     </div>
     <div v-for="bread in breads" :key="bread.id">
       <h2 v-on:click="setSelectedBread(bread)">{{ bread.name }}</h2>
-      <p>{{ (bread.price*mnoznik).toFixed(2)}}</p>
+      <p>{{ (bread.price/mnoznik).toFixed(2)}}</p>
       <p>{{ bread.recipe }}</p>
       <button v-if="selectedBread === bread" v-on:click="editBread(bread)">Edytuj</button>
       <button v-if="selectedBread === bread" v-on:click="deleteBread(bread)">Usun</button>
