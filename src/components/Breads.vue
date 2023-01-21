@@ -1,5 +1,7 @@
 <template>
   <div>
+    
+    <button v-on:click="zmianaKolorku()" id="buttonChangeStyle">Zmiana koloru</button>
     <div name="Waluta">
       <label>Wybierz walutę </label>
       <select id="selectWaluta" ref="selectWaluta" @change="changeMnoznik($event)">
@@ -142,9 +144,22 @@ export default {
         this.author = '';
       })
     },
-
-
-
-  }
+    zmianaKolorku()
+    { 
+      var element = document.body;
+      element.classList.toggle("dark");
+      localStorage.setItem('stylZmieniany',document.body.classList.contains('dark')? 'dark' : "light")
+      if(localStorage.getItem('stylZmieniany')==='dark')
+      {
+          document.body.classList.add('dark');
+      }
+  }}
 }
 </script>
+<style id="stylZmieniany">
+                
+.dark {
+    background-color: black;
+}
+</style>
+
