@@ -1,7 +1,5 @@
 <template>
   <div>
-    
-    <button v-on:click="zmianaKolorku()" id="buttonChangeStyle">Zmiana koloru</button>
     <div name="Waluta">
       <label>Wybierz walutę </label>
       <select id="selectWaluta" ref="selectWaluta" @change="changeMnoznik($event)">
@@ -16,17 +14,40 @@
       <h2 v-on:click="setSelectedBread(bread)">{{ bread.name }}</h2>
       <p>{{ (bread.price/mnoznik).toFixed(2)}}</p>
       <p>{{ bread.recipe }}</p>
-      <button v-if="selectedBread === bread" v-on:click="editBread(bread)">Edytuj</button>
+      <button v-if="selectedBread === bread" v-on:click="setEditingBread(bread)">Edytuj</button>
       <button v-if="selectedBread === bread" v-on:click="deleteBread(bread)">Usun</button>
       <button v-if="selectedBread === bread" v-on:click="showForm = !showForm">Dodaj opinie</button>
 
       <div v-if="selectedBread === bread">
+        <div v-if="editingBread === bread">
+            <form>
+                <label>Nazwa:
+                    <input v-model="editingBread.name" type="text"/>
+                </label>
+                <label>Cena:
+                    <input v-model="editingBread.price" type="number"/>
+                </label>
+                <label>Przepis:
+                    <textarea v-model="editingBread.recipe"></textarea>
+                </label>
+                <button v-on:click="saveChanges(bread)">Zapisz zmiany</button>
+                <button v-on:click="cancelEditing()">Anuluj</button>
+            </form>
+        </div>
         <div v-if="showForm">
         <form @submit.prevent="addReview(bread)">
-          <input v-model="text" placeholder="text" type="text" />
-          <input v-model="score" placeholder="score" type="text" />
-          <input v-model="author" placeholder="author" type="text" />
-          <button type="submit">Dodaj opinie</button>
+          <label>Tekst: 
+        <input v-model="text" placeholder="text" type="text" />
+    </label>
+    <label>Autor: 
+        <input v-model="author" placeholder="author" type="text" />
+    </label>
+    <label>Ocena:
+        <select v-model="score">
+            <option v-for="n in 5" :value="n">{{n}}</option>
+        </select>
+    </label>
+    <button type="submit">Dodaj opinie</button>
         </form>
       </div>
         <h3>Opinie:</h3>
@@ -62,13 +83,11 @@ export default {
     recipe: '',
     imagePath: 'path',
     selectedBread: null,
-    editingBread: null,
-    editingIndex: -1,
     showForm: false,
     text: '',
     score: '',
     Author: '',
-
+    editingBread: null,
 
 
 
@@ -76,13 +95,13 @@ export default {
     }
   },
   created() {
-    axios.get('http://localhost:3000/breads')
+     axios.get('http://localhost:3000/breads')
     .then(response => {
       this.breads = response.data;
     })
     axios.get('http://localhost:3000/reviews')
     .then(response => {
-      this.reviews = response.data;
+     this.reviews = response.data;
     })
   },
   methods: {
@@ -107,6 +126,7 @@ export default {
       
     }
     },
+
     addBread() {
       axios.post('http://localhost:3000/breads', {
       name: this.name,
@@ -144,22 +164,33 @@ export default {
         this.author = '';
       })
     },
-    zmianaKolorku()
-    { 
-      var element = document.body;
-      element.classList.toggle("dark");
-      localStorage.setItem('stylZmieniany',document.body.classList.contains('dark')? 'dark' : "light")
-      if(localStorage.getItem('stylZmieniany')==='dark')
-      {
-          document.body.classList.add('dark');
-      }
-  }}
+    editBread(bread) {
+
+  },
+  setEditingBread(bread) {
+            this.editingBread = bread;
+        },
+        saveChanges(bread) {
+          axios.put('http://localhost:3000/breads/' + bread.id, {
+          name: bread.name,
+          price: bread.price,
+          recipe: bread.recipe,
+        })
+        .then(response => {
+          console.log(response);
+          this.editingBread = null;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+            this.editingBread = null;
+        },
+        cancelEditing() {
+            this.editingBread = null;
+        }
+
+
+
+  }
 }
 </script>
-<style id="stylZmieniany">
-                
-.dark {
-    background-color: black;
-}
-</style>
-
