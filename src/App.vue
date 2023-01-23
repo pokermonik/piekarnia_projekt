@@ -1,31 +1,39 @@
 <template>
-  <div>
-    <breads />
-    <reviews />
-  </div>
-  
+    <div>
+      <breads/>
+      <reviews/>
+    </div>
 </template>
-<script>
-import Breads from './components/Breads.vue'
-import reviews from './components/reviews.vue'
+  <script>
 
-export default {
-  name: 'App',
-  components: {
-    //HelloWorld,
-    Breads,
-    reviews
+  import Breads from './components/Breads.vue'
+  import reviews from './components/reviews.vue'
+  
+  export default {
+    name: 'App',
+    components: {
+        Breads,
+        reviews
+    }
   }
-}
-</script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+  </script>
+  
+  <style>
+  
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    background:linear-gradient(
+          rgba(0, 0, 0, 0.523), 
+          rgba(0, 0, 0, 0.539)
+        ), url("assets/background.jpg");
+    background-size: cover;
+    margin: 0;
+    padding:0;
+    background-attachment: fixed;
+  }
+  
+  </style>
