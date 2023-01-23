@@ -7,7 +7,7 @@
             </div>
             <!-- kurs walut api -->
             <div name="Waluta" class="waluta">
-                <label>Wybierz walutę </label>
+                <label>   Wybierz walutę </label>
                 <select id="selectWaluta" ref="selectWaluta" @change="changeMnoznik($event)">
                 <option value="1">PLN</option>
                 <option value="2">USD</option>
@@ -120,6 +120,7 @@
             </div>
         </div>
     </div>
+    <footer>@Copyright Marek Chojnowski, Bartek Dawidziuk, Mateusz Węcławski, Grzegorz Denert 2023</footer>
 </template>
   
 <script>
@@ -475,4 +476,46 @@ p{
 .btn_add .btn_color:hover{
     color:#e29f22;
 }
+input[type=text]:focus {
+  background-color: lightblue;
+}
+.waluta{
+  border-radius: 25px;
+  border-style: solid;
+  border-color:black;
+  border-width:  medium;
+  border-bottom-style:solid;
+  
+  background-color:#e29f22;
+}
+select {
+  border-radius: 25px;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color:#e29f22;
+  border-style:none;
+}
+select:hover
+{
+
+  background-color:rgba(201, 135, 14, 0.578);
+}
+label
+{
+  
+  border-right-style:solid;
+  border-width:  medium;
+  border-color:black;
+  cursor: default;
+  float:left;
+}
+footer{
+  text-align: center;
+  padding: 3px;
+  background-color:#e29f22;
+  color: white;
+}
+
 </style>
