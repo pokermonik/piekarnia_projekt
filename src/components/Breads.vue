@@ -27,6 +27,7 @@
                 </div>
                 <h2 @click="setSelectedBread(bread)">{{ bread.name }}</h2>
                 <p>{{ (bread.price/mnoznik).toFixed(2)}}</p>
+               
                 
                 <!-- edycja chlebka -->
                 <div v-if="editingBread === bread" class="edit">
@@ -89,14 +90,35 @@
                     </div>
                 </div>
 
+                <!-- dodawanie chlebka do koszyka -->
+                <div v-if="toCartBread === bread" class="addToCart">
+                    <div class="cartInputs">
+                        <h3>Dodawanie:</h3>
+                        <div class="addArticle">
+                            <form>
+                                <label>Ilość: 
+                                    <input type="number" id="quantity" v-model="quantity"
+                                    min="1" max="100" step="1">
+                                </label>
+                                <div class="cartback">
+                                    <button v-if="selectedBread===bread" @click="addBreadToCart(selectedBread)">Dodaj</button> 
+                                    <button @click="cancelAddToCart()">Anuluj</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <div v-if="selectedBread === bread" class="buttons">
                     <!-- po kliknieciu w chlebek -->
                     <button  v-if="selectedBread === bread" @click="deleteBread(bread)" >Usun</button>
                     <button v-if="selectedBread === bread" @click="setEditingBread(bread)">Edytuj</button>
                     <button v-if="selectedBread === bread" @click="setOpinionBread(bread)">Opinie</button>
                     <button v-if="selectedBread === bread" @click="setRecipeBread(bread)">Przepis</button>
+                    <button v-if="selectedBread === bread" @click="setBreadToCart(bread)">Dodaj do koszyka</button>
                 </div>
             </div>
+
 
 
             <!-- panel do dodawania chlebków -->
@@ -118,6 +140,58 @@
                         </div>
                     </form>
             </div>
+            
+        </div>
+        <div class="cart">
+            <div id="title">Koszyk</div>
+            <div id="content">
+                <table id="receipt" ref="receipt">
+                    <tr id="receiptRow">
+                        <td>    
+                            LP
+                        </td>
+                        <td class="Nazwa" style="text-align:center">
+                            NAZWA
+                        </td>
+                        <td class="Ilosc" style="text-align:center">
+                            ILOŚĆ
+                        </td>
+                        <td class="Cena" style="text-align:center">
+                            CENA
+                        </td>
+                        <td class="Suma" style="text-align:center">
+                            SUMA
+                        </td>
+                        
+                        
+                    </tr>
+                    
+                    <tr id="totalCena">
+                        <td style="border:none"></td>
+                        <td style="border:none"></td>
+                        <td style="border:none"></td>
+                        <td style="text-align:center">
+                            RAZEM:
+                        </td>
+                        <td id="c" style="text-align:center" ref="calkowitaSuma">
+        
+                        </td>
+        
+                    </tr>
+                    <tr>
+                        <td style="border:none"></td>
+                        <td style="border:none"></td>
+                        <td style="border:none"></td>
+                        <td style="text-align:center">
+                            RAZEM ({{ waluta }}):
+                        </td>
+                        <td id="cw" style="text-align:center" ref="calkowitaSumaWaluta">
+                            {{ (total/mnoznik).toFixed(2) }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+          
         </div>
     </div>
     <footer>@Copyright Marek Chojnowski, Bartek Dawidziuk, Mateusz Węcławski, Grzegorz Denert 2023</footer>
@@ -141,10 +215,17 @@
         text: '',
         score: '',
         Author: '',
+        quantity:1,
         editingBread: null,
         opinionBread: null,
         recipeBread: null,
+        toCartBreadArray: [],
+        toCartBread:null,
+        licznikCart:0,
+        total:0,
         mnoznik:1,
+        waluta:'PLN',
+        calkowitaSumaWaluta:0,
         previewImage: null
       }
     },
@@ -176,14 +257,14 @@
         },
         changeMnoznik(e)
         {
-            let waluta =this.$refs.selectWaluta[e.target.value-1].textContent
-            if(waluta=="PLN")
+            this.waluta =this.$refs.selectWaluta[e.target.value-1].textContent
+            if(this.waluta=="PLN")
             {
                 this.mnoznik=1
             }
             else
             {
-                axios.get('https://api.nbp.pl/api/exchangerates/rates/A/'+waluta+'/?format=json')
+                axios.get('https://api.nbp.pl/api/exchangerates/rates/A/'+this.waluta+'/?format=json')
                 .then(response=>
                 {
                     this.mnoznik=response.data.rates[0].mid
@@ -263,6 +344,45 @@
         },
         cancelRecipe() {
             this.recipeBread = null;
+        },
+        setBreadToCart(bread) {
+            this.toCartBread = bread;
+        },
+        cancelAddToCart() {
+            this.toCartBread = null;
+        },
+        addBreadToCart(bread) {  
+            this.toCartBreadArray[this.licznikCart]=bread;
+            console.log(this.toCartBreadArray[this.licznikCart]);
+            var paragon = this.$refs.receipt
+            var totalRowLength=paragon.rows.length;
+            var row=paragon.insertRow(totalRowLength-2)
+            console.log("TU="+totalRowLength);
+            let testCell = row.insertCell(-1)
+            testCell.innerHTML=this.licznikCart+1
+            testCell = row.insertCell(-1)
+            testCell.innerHTML=this.toCartBreadArray[this.licznikCart].name
+
+            testCell = row.insertCell(-1)
+            testCell.innerHTML=this.quantity
+
+            testCell = row.insertCell(-1)
+            let cena = this.toCartBreadArray[this.licznikCart].price*1
+            testCell.innerHTML=cena.toFixed(2)
+
+            testCell = row.insertCell(-1)
+            let sumaChlebka=this.toCartBreadArray[this.licznikCart].price * this.quantity
+            testCell.innerHTML=sumaChlebka.toFixed(2)
+            this.total=this.total+sumaChlebka
+        
+
+            var testSuma = this.$refs.calkowitaSuma;
+            testSuma.innerHTML=this.total.toFixed(2)
+            this.licznikCart++;
+            this.quantity=1;
+            this.toCartBread = null;
+
+            event.preventDefault();
         }
     }
   }
@@ -340,14 +460,13 @@ body{
 }
 
 .upbar{
-width: 100%;
-background-color: #bb7900;
-position:fixed;
-top:0;
-left:0;
-height: 80px;
-z-index: 8;
-
+    width: 100%;
+    background-color: #bb7900;
+    position:fixed;
+    top:0;
+    left:0;
+    height: 80px;
+    z-index: 8;
 }
 .logo{
     margin: 0 auto;
@@ -442,6 +561,11 @@ a {
     bottom:8px;
     left: 17%;
 }
+.cartback{
+    position:absolute;
+    bottom:30px;
+    left: 30%;
+}
 .recipe_text{
     text-align: center;
     justify-content: center;
@@ -458,10 +582,9 @@ a {
     padding-left:10px;
 }
 .btn_add{
-color:black;
-padding-top: 210px;
-width: 260px;
-
+    color:black;
+    padding-top: 210px;
+    width: 260px;
 }
 p{
     margin:0;
@@ -475,6 +598,119 @@ p{
 }
 .btn_add .btn_color:hover{
     color:#e29f22;
+}
+.addToCart{
+    position: relative;
+    background-color: rgba(128, 128, 128);
+    bottom: 324px;
+    width: 280px;
+    height: 332px;
+    border-radius: 25px;
+    z-index: 5;
+}
+.cartInputs{
+    width: 250px;
+    padding-left:10px;
+}
+
+
+upbar{
+    width: 100%;
+    background-color: #bb7900;
+    position:fixed;
+    top:0;
+    left:0;
+    height: 80px;
+    z-index: 8;
+}
+
+.cart{
+    width: 100%;
+    background-color: #f7f5f1;
+    color:black;
+    /* position:fixed;
+    top:0;
+    left:0;
+    height: 80px;
+    z-index: 8; */
+}
+
+
+#title, #content{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    border-top: 2px solid grey;
+    border-bottom: 2px solid grey;
+}
+
+#title{
+    width: 50%;
+    border-top: 2px solid grey;
+    text-align: center;
+    font-size: xx-large;
+}
+
+#receipt{
+    margin:auto;
+    width:100%;
+    table-layout: fixed;
+}
+.Nazwa{
+    
+    text-align:left;
+}
+.Ilosc, .Cena, .Suma{
+    text-align:right;
+}
+#receipt td{
+    border: 1px solid black;
+    word-break:break-all;
+}
+
+.tableData
+{
+    border-left: 1px solid gray;
+    padding:5px;
+}
+
+#nowaPozycjaTable{
+    border:none;
+}
+
+#c
+{
+    color: blue;
+    text-align:right;}
+
+
+table tr:not(:first-child)
+{
+    cursor: pointer;transition: all .25s ease-in-out;
+}
+table tr:not(:first-child):hover
+{
+    background-color: #ddd;
+}
+
+#errorsHere{
+    height: 20px;
+    position: relative;
+    margin-left: 30%;
+    width: 40%;
+    text-align: center;
+    color: red;
+}
+
+#error{
+    align-items: center;
+    height: 50px;
+}
+
+#btnReset{
+    position: relative;
+    bottom: 10px;
+    margin-left: 45%;
 }
 input[type=text]:focus {
   background-color: lightblue;

@@ -13,7 +13,8 @@
     name: 'App',
     components: {
         Breads,
-        reviews
+        reviews,
+        
     }
   }
   </script>
