@@ -23,7 +23,7 @@
             <!-- karta z chlebkiem -->
             <div v-for="bread in breads" :key="bread.id" class="breads_card">
                 <div @click="setSelectedBread(bread)" class="image">
-                    <img src="../assets/photoBreads/pszenny.jpg" class="image_fit"/>
+                    <img src="../assets/photoBreads/bulki.jpg" class="image_fit"/>
                 </div>
                 <h2 @click="setSelectedBread(bread)">{{ bread.name }}</h2>
                 <p>{{ (bread.price/mnoznik).toFixed(2)}}</p>
@@ -276,7 +276,8 @@
             }
         },
         addBread() {
-            axios.post('http://localhost:3000/breads', {
+            if (!isNaN(this.price)) {
+                axios.post('http://localhost:3000/breads', {
             name: this.name,
             price: this.price,
             recipe: this.recipe,
@@ -285,6 +286,10 @@
             .then(response => {
             this.breads.push(response.data);
             })
+            } else {
+                alert("Popraw dane! Cena musi być numerem")
+            }
+           
             },
         setSelectedBread(bread) {
             this.selectedBread = bread
@@ -383,7 +388,13 @@
             this.toCartBread = null;
 
             event.preventDefault();
+        },
+        getImgUrl(pic) {
+            console.log('../assets/photoBreads/'+pic)
+            return require('../assets/photoBreads/'+pic)
+
         }
+
     }
   }
 </script>
