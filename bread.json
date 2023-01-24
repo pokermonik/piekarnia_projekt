@@ -32,7 +32,6 @@
       "name": "gfgfg",
       "price": "444",
       "recipe": "fdfdfd",
-      "imagePath": "bulki.jpg",
       "id": 17
     },
     {
@@ -48,6 +47,13 @@
       "recipe": "fdfdf",
       "imagePath": "",
       "id": 19
+    },
+    {
+      "name": "gesf",
+      "price": "0.42131",
+      "recipe": "grsfd",
+      "imagePath": null,
+      "id": 20
     }
   ],
   "reviews": [
@@ -78,6 +84,13 @@
       "author": "Eugeniusz",
       "breadId": 19,
       "id": 4
+    },
+    {
+      "text": "ew",
+      "score": "2",
+      "author": "ef",
+      "breadId": 14,
+      "id": 5
     }
   ]
 }

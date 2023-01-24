@@ -27,6 +27,7 @@
                 </div>
                 <h2 @click="setSelectedBread(bread)">{{ bread.name }}</h2>
                 <p>{{ (bread.price/mnoznik).toFixed(2)}}</p>
+               
                 
                 <!-- edycja chlebka -->
                 <div v-if="editingBread === bread" class="edit">
@@ -96,11 +97,11 @@
                         <div class="addArticle">
                             <form>
                                 <label>Ilość: 
-                                    <input type="number" id="quantity"
-                                    min="1" max="100" step="1" value="1">
+                                    <input type="number" id="quantity" v-model="quantity"
+                                    min="1" max="100" step="1">
                                 </label>
                                 <div class="cartback">
-                                    <button @click="addBreadToCart()">Dodaj</button> 
+                                    <button v-if="selectedBread===bread" @click="addBreadToCart(selectedBread)">Dodaj</button> 
                                     <button @click="cancelAddToCart()">Anuluj</button>
                                 </div>
                             </form>
@@ -117,6 +118,7 @@
                     <button v-if="selectedBread === bread" @click="setBreadToCart(bread)">Dodaj do koszyka</button>
                 </div>
             </div>
+
 
 
             <!-- panel do dodawania chlebków -->
@@ -138,6 +140,58 @@
                         </div>
                     </form>
             </div>
+            
+        </div>
+        <div class="cart">
+            <div id="title">Koszyk</div>
+            <div id="content">
+                <table id="receipt" ref="receipt">
+                    <tr id="receiptRow">
+                        <td>    
+                            LP
+                        </td>
+                        <td class="Nazwa" style="text-align:center">
+                            NAZWA
+                        </td>
+                        <td class="Ilosc" style="text-align:center">
+                            ILOŚĆ
+                        </td>
+                        <td class="Cena" style="text-align:center">
+                            CENA
+                        </td>
+                        <td class="Suma" style="text-align:center">
+                            SUMA
+                        </td>
+                        
+                        
+                    </tr>
+                    
+                    <tr id="totalCena">
+                        <td style="border:none"></td>
+                        <td style="border:none"></td>
+                        <td style="border:none"></td>
+                        <td style="text-align:center">
+                            RAZEM:
+                        </td>
+                        <td id="c" style="text-align:center" ref="calkowitaSuma">
+        
+                        </td>
+        
+                    </tr>
+                    <tr>
+                        <td style="border:none"></td>
+                        <td style="border:none"></td>
+                        <td style="border:none"></td>
+                        <td style="text-align:center">
+                            RAZEM ({{ waluta }}):
+                        </td>
+                        <td id="cw" style="text-align:center" ref="calkowitaSumaWaluta">
+                            {{ (total/mnoznik).toFixed(2) }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+          
         </div>
     </div>
 </template>
@@ -160,11 +214,17 @@
         text: '',
         score: '',
         Author: '',
+        quantity:1,
         editingBread: null,
         opinionBread: null,
         recipeBread: null,
-        toCartBread: null,
+        toCartBreadArray: [],
+        toCartBread:null,
+        licznikCart:0,
+        total:0,
         mnoznik:1,
+        waluta:'PLN',
+        calkowitaSumaWaluta:0,
         previewImage: null
       }
     },
@@ -196,14 +256,14 @@
         },
         changeMnoznik(e)
         {
-            let waluta =this.$refs.selectWaluta[e.target.value-1].textContent
-            if(waluta=="PLN")
+            this.waluta =this.$refs.selectWaluta[e.target.value-1].textContent
+            if(this.waluta=="PLN")
             {
                 this.mnoznik=1
             }
             else
             {
-                axios.get('https://api.nbp.pl/api/exchangerates/rates/A/'+waluta+'/?format=json')
+                axios.get('https://api.nbp.pl/api/exchangerates/rates/A/'+this.waluta+'/?format=json')
                 .then(response=>
                 {
                     this.mnoznik=response.data.rates[0].mid
@@ -290,12 +350,38 @@
         cancelAddToCart() {
             this.toCartBread = null;
         },
-        addBreadToCart() {  
-            // let articles = this.$ref.articles
-         
-            // console.log(bread );
-            console.log("tak" );
+        addBreadToCart(bread) {  
+            this.toCartBreadArray[this.licznikCart]=bread;
+            console.log(this.toCartBreadArray[this.licznikCart]);
+            var paragon = this.$refs.receipt
+            var totalRowLength=paragon.rows.length;
+            var row=paragon.insertRow(totalRowLength-2)
+            console.log("TU="+totalRowLength);
+            let testCell = row.insertCell(-1)
+            testCell.innerHTML=this.licznikCart+1
+            testCell = row.insertCell(-1)
+            testCell.innerHTML=this.toCartBreadArray[this.licznikCart].name
+
+            testCell = row.insertCell(-1)
+            testCell.innerHTML=this.quantity
+
+            testCell = row.insertCell(-1)
+            let cena = this.toCartBreadArray[this.licznikCart].price*1
+            testCell.innerHTML=cena.toFixed(2)
+
+            testCell = row.insertCell(-1)
+            let sumaChlebka=this.toCartBreadArray[this.licznikCart].price * this.quantity
+            testCell.innerHTML=sumaChlebka.toFixed(2)
+            this.total=this.total+sumaChlebka
+        
+
+            var testSuma = this.$refs.calkowitaSuma;
+            testSuma.innerHTML=this.total.toFixed(2)
+            this.licznikCart++;
+            this.quantity=1;
             this.toCartBread = null;
+
+            event.preventDefault();
         }
     }
   }
@@ -524,5 +610,105 @@ p{
 .cartInputs{
     width: 250px;
     padding-left:10px;
+}
+
+
+upbar{
+    width: 100%;
+    background-color: #bb7900;
+    position:fixed;
+    top:0;
+    left:0;
+    height: 80px;
+    z-index: 8;
+}
+
+.cart{
+    width: 100%;
+    background-color: #f7f5f1;
+    color:black;
+    /* position:fixed;
+    top:0;
+    left:0;
+    height: 80px;
+    z-index: 8; */
+}
+
+
+#title, #content{
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    border-top: 2px solid grey;
+    border-bottom: 2px solid grey;
+}
+
+#title{
+    width: 50%;
+    border-top: 2px solid grey;
+    text-align: center;
+    font-size: xx-large;
+}
+
+#receipt{
+    margin:auto;
+    width:100%;
+    table-layout: fixed;
+}
+.Nazwa{
+    
+    text-align:left;
+}
+.Ilosc, .Cena, .Suma{
+    text-align:right;
+}
+#receipt td{
+    border: 1px solid black;
+    word-break:break-all;
+}
+
+.tableData
+{
+    border-left: 1px solid gray;
+    padding:5px;
+}
+
+#nowaPozycjaTable{
+    border:none;
+}
+
+#c
+{
+    color: blue;
+    text-align:right;}
+
+
+table tr:not(:first-child)
+{
+    cursor: pointer;transition: all .25s ease-in-out;
+}
+table tr:not(:first-child):hover
+{
+    background-color: #ddd;
+}
+
+#errorsHere{
+    height: 20px;
+    position: relative;
+    margin-left: 30%;
+    width: 40%;
+    text-align: center;
+    color: red;
+}
+
+#error{
+    align-items: center;
+    height: 50px;
+}
+
+#btnReset{
+    position: relative;
+    bottom: 10px;
+    margin-left: 45%;
 }
 </style>
