@@ -2,10 +2,12 @@
     <div>
       <breads/>
       <reviews/>
+      <cartView/>
     </div>
 </template>
   <script>
 
+  import cartView from './components/cartView.vue'
   import Breads from './components/Breads.vue'
   import reviews from './components/reviews.vue'
   
@@ -13,7 +15,8 @@
     name: 'App',
     components: {
         Breads,
-        reviews
+        reviews,
+        cartView
     }
   }
   </script>

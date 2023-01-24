@@ -89,12 +89,32 @@
                     </div>
                 </div>
 
+                <!-- dodawanie chlebka do koszyka -->
+                <div v-if="toCartBread === bread" class="addToCart">
+                    <div class="cartInputs">
+                        <h3>Dodawanie:</h3>
+                        <div class="addArticle">
+                            <form>
+                                <label>Ilość: 
+                                    <input type="number" id="quantity"
+                                    min="1" max="100" step="1" value="1">
+                                </label>
+                                <div class="cartback">
+                                    <button @click="addBreadToCart()">Dodaj</button> 
+                                    <button @click="cancelAddToCart()">Anuluj</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
                 <div v-if="selectedBread === bread" class="buttons">
                     <!-- po kliknieciu w chlebek -->
                     <button  v-if="selectedBread === bread" @click="deleteBread(bread)" >Usun</button>
                     <button v-if="selectedBread === bread" @click="setEditingBread(bread)">Edytuj</button>
                     <button v-if="selectedBread === bread" @click="setOpinionBread(bread)">Opinie</button>
                     <button v-if="selectedBread === bread" @click="setRecipeBread(bread)">Przepis</button>
+                    <button v-if="selectedBread === bread" @click="setBreadToCart(bread)">Dodaj do koszyka</button>
                 </div>
             </div>
 
@@ -143,6 +163,7 @@
         editingBread: null,
         opinionBread: null,
         recipeBread: null,
+        toCartBread: null,
         mnoznik:1,
         previewImage: null
       }
@@ -262,6 +283,19 @@
         },
         cancelRecipe() {
             this.recipeBread = null;
+        },
+        setBreadToCart(bread) {
+            this.toCartBread = bread;
+        },
+        cancelAddToCart() {
+            this.toCartBread = null;
+        },
+        addBreadToCart() {  
+            // let articles = this.$ref.articles
+         
+            // console.log(bread );
+            console.log("tak" );
+            this.toCartBread = null;
         }
     }
   }
@@ -339,14 +373,13 @@ body{
 }
 
 .upbar{
-width: 100%;
-background-color: #bb7900;
-position:fixed;
-top:0;
-left:0;
-height: 80px;
-z-index: 8;
-
+    width: 100%;
+    background-color: #bb7900;
+    position:fixed;
+    top:0;
+    left:0;
+    height: 80px;
+    z-index: 8;
 }
 .logo{
     margin: 0 auto;
@@ -441,6 +474,11 @@ a {
     bottom:8px;
     left: 17%;
 }
+.cartback{
+    position:absolute;
+    bottom:30px;
+    left: 30%;
+}
 .recipe_text{
     text-align: center;
     justify-content: center;
@@ -457,10 +495,9 @@ a {
     padding-left:10px;
 }
 .btn_add{
-color:black;
-padding-top: 210px;
-width: 260px;
-
+    color:black;
+    padding-top: 210px;
+    width: 260px;
 }
 p{
     margin:0;
@@ -474,5 +511,18 @@ p{
 }
 .btn_add .btn_color:hover{
     color:#e29f22;
+}
+.addToCart{
+    position: relative;
+    background-color: rgba(128, 128, 128);
+    bottom: 324px;
+    width: 280px;
+    height: 332px;
+    border-radius: 25px;
+    z-index: 5;
+}
+.cartInputs{
+    width: 250px;
+    padding-left:10px;
 }
 </style>

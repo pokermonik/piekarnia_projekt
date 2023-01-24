@@ -1,50 +1,45 @@
 {
   "breads": [
     {
-      "name": "Bread",
-      "price": "3.20",
-      "recipe": "Stir together all of the ingredients (except the cornmeal) in a large bowl, starting with 4 1/2 cups of the flour. Use a sturdy spoon, or your stand mixer equipped with the beater paddle. Mix until everything comes together in a rough, shaggy mass of dough.",
-      "imagePath": "path",
-      "id": 3
-    },
-    {
-      "name": "dsds",
+      "name": "Rzymski",
       "price": "44",
       "recipe": "dsdd",
-      "imagePath": "path",
+      "imagePath": "bulki.jpg",
       "id": 10
     },
     {
-      "name": "4554",
-      "price": "bvbvb",
+      "name": "Razowy",
+      "price": "4554",
       "recipe": "fddfdf",
+      "imagePath": "bulki.jpg",
       "id": 13
     },
     {
-      "name": "fdf",
+      "name": "Białostocki",
       "price": "444",
       "recipe": "fdffdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "imagePath": "bulki.jpg",
       "id": 14
     },
     {
-      "name": "fdf",
+      "name": "Sokólski",
       "price": "444",
       "recipe": "fdf",
-      "imagePath": "path",
+      "imagePath": "bulki.jpg",
       "id": 16
     },
     {
       "name": "gfgfg",
       "price": "444",
       "recipe": "fdfdfd",
-      "imagePath": "data:image/jpeg",
+      "imagePath": "bulki.jpg",
       "id": 17
     },
     {
       "name": "fdf",
       "price": "4",
       "recipe": "4",
-      "imagePath": null,
+      "imagePath": "bulki.jpg",
       "id": 18
     },
     {
@@ -76,6 +71,13 @@
       "author": "fdfdffd",
       "breadId": 13,
       "id": 3
+    },
+    {
+      "text": "Bardzo dobry chlebek",
+      "score": "5",
+      "author": "Eugeniusz",
+      "breadId": 19,
+      "id": 4
     }
   ]
 }
