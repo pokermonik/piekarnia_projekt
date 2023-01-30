@@ -165,7 +165,14 @@
                         
                         
                     </tr>
-                    
+                    <div v-for="bread in toCartBreadArray" :key="bread.id" style="text-align:center">
+                        <td>{{ bread.numerek }}</td>
+                        <td>{{ bread.name }}</td>
+                        <td>{{ bread.quantity }}</td>
+                        <td>{{ (bread.price/mnoznik).toFixed(2)}}</td>
+                        <td>{{ (bread.suma/mnoznik).toFixed(2)}}</td>
+                    </div>
+
                     <tr id="totalCena">
                         <td style="border:none"></td>
                         <td style="border:none"></td>
@@ -173,21 +180,10 @@
                         <td style="text-align:center">
                             RAZEM:
                         </td>
-                        <td id="c" style="text-align:center" ref="calkowitaSuma">
+                        
+                            <td>{{ (this.total/mnoznik).toFixed(2)}}</td>
+                        
         
-                        </td>
-        
-                    </tr>
-                    <tr>
-                        <td style="border:none"></td>
-                        <td style="border:none"></td>
-                        <td style="border:none"></td>
-                        <td style="text-align:center">
-                            RAZEM ({{ waluta }}):
-                        </td>
-                        <td id="cw" style="text-align:center" ref="calkowitaSumaWaluta">
-                            {{ (total/mnoznik).toFixed(2) }}
-                        </td>
                     </tr>
                 </table>
             </div>
@@ -221,7 +217,7 @@
         recipeBread: null,
         toCartBreadArray: [],
         toCartBread:null,
-        licznikCart:0,
+        licznikCart:1,
         total:0,
         mnoznik:1,
         waluta:'PLN',
@@ -357,7 +353,29 @@
             this.toCartBread = null;
         },
         addBreadToCart(bread) {  
-            this.toCartBreadArray[this.licznikCart]=bread;
+                        
+
+
+            var breadCart=
+            {
+                numerek: this.licznikCart,
+                name: bread.name,
+                quantity: this.quantity,
+                price: bread.price,
+                suma: this.quantity*bread.price
+            };
+        
+            
+            
+            this.toCartBreadArray.push(breadCart);
+            this.total=this.total+breadCart.suma;
+            this.licznikCart++;
+            event.preventDefault();
+            
+            
+           
+            
+            /*this.toCartBreadArray[this.licznikCart]=bread;
             console.log(this.toCartBreadArray[this.licznikCart]);
             var paragon = this.$refs.receipt
             var totalRowLength=paragon.rows.length;
@@ -387,7 +405,7 @@
             this.quantity=1;
             this.toCartBread = null;
 
-            event.preventDefault();
+            event.preventDefault();*/
         },
         getImgUrl(pic) {
             console.log('../assets/photoBreads/'+pic)
