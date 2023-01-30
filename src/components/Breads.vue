@@ -15,6 +15,7 @@
                 <option value="4">EUR</option>
                 <option value="5">CHF</option>
                 </select>
+
             </div>
         </div>
 
@@ -118,7 +119,7 @@
                     <button v-if="selectedBread === bread" @click="setBreadToCart(bread)">Dodaj do koszyka</button>
                 </div>
             </div>
-
+            
 
 
             <!-- panel do dodawania chlebków -->
@@ -142,6 +143,10 @@
             </div>
             
         </div>
+        <div>
+                <button @click="sortBreads('asc')">Sort by Price (Ascending)</button>
+                <button @click="sortBreads('desc')">Sort by Price (Descending)</button>
+                </div>
         <div class="cart">
             <div id="title">Koszyk</div>
             <div id="content">
@@ -411,7 +416,14 @@
             console.log('../assets/photoBreads/'+pic)
             return require('../assets/photoBreads/'+pic)
 
-        }
+        },
+        sortBreads(order) {
+      if (order === 'asc') {
+        this.breads.sort((a, b) => a.price - b.price)
+      } else {
+        this.breads.sort((a, b) => b.price - a.price)
+      }
+    },
 
     }
   }
