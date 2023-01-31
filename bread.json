@@ -5,6 +5,7 @@
       "price": "44",
       "recipe": "dsdd",
       "imagePath": "bulki.jpg",
+      "categoryId": 1,
       "id": 10
     },
     {
@@ -12,13 +13,15 @@
       "price": "4554",
       "recipe": "fddfdf",
       "imagePath": "bulki.jpg",
+      "categoryId": 1,
       "id": 13
     },
     {
       "name": "Białostocki",
       "price": "444",
-      "recipe": "fdffdffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "recipe": "fdffdffff",
       "imagePath": "bulki.jpg",
+      "categoryId": 1,
       "id": 14
     },
     {
@@ -26,12 +29,15 @@
       "price": "444",
       "recipe": "fdf",
       "imagePath": "bulki.jpg",
+      "categoryId": 1,
       "id": 16
     },
     {
       "name": "gfgfg",
       "price": "444",
       "recipe": "fdfdfd",
+      "imagePath": "bulki.jpg",
+      "categoryId": 2,
       "id": 17
     },
     {
@@ -39,12 +45,15 @@
       "price": "4",
       "recipe": "4",
       "imagePath": "bulki.jpg",
+      "categoryId": 2,
       "id": 18
     },
     {
       "name": "gfggfg",
       "price": "666",
       "recipe": "fdfdf",
+      "imagePath": "bulki.jpg",
+      "categoryId": 2,
       "id": 19
     },
     {
@@ -52,7 +61,16 @@
       "price": "0.42131",
       "recipe": "grsfd",
       "imagePath": null,
+      "categoryId": 2,
       "id": 20
+    },
+    {
+      "name": "Sokólski",
+      "price": "21",
+      "recipe": "Aby uzyskać smak tradycyjnego Sokólskiego pieczywa",
+      "imagePath": null,
+      "categoryId": 2,
+      "id": 21
     }
   ],
   "reviews": [
@@ -90,6 +108,16 @@
       "author": "ef",
       "breadId": 14,
       "id": 5
+    }
+  ],
+  "categorys": [
+    {
+      "name": "Biały",
+      "id": 1
+    },
+    {
+      "name": "Pełnoziarnisty",
+      "id": 2
     }
   ]
 }

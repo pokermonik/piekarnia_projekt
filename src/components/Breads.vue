@@ -19,10 +19,29 @@
             </div>
         </div>
 
+
+        <!-- <div class="form-check" v-for="(price, index) in prices">
+            <input class="form-check-input" type="checkbox" :value="index" :id="'price'+index" v-model="selected.prices">
+            <label class="form-check-label" :for="'price' + index">
+                {{ price.name }} ({{ price.products_count }})
+            </label>
+        </div> -->
+        <div class="upbar">
+            <div v-for="category in categorys" :key="category.id" class="filtr">
+                <input class="form-check-input" type="checkbox" :value="category.id" :id="category.id" v-model="selected.categories">    
+                <!--  v-model="selected.prices" -->
+                <label class="form-check-label" :for="category">
+                    {{ category.name }}
+                </label>
+            </div>
+            <button @click="filter">Filtruj</button>
+        </div>
+        
+
         <!-- wszystkie karty z chlebkiem -->
         <div class="breads">
             <!-- karta z chlebkiem -->
-            <div v-for="bread in breads" :key="bread.id" class="breads_card">
+            <div v-for="bread in showedBreads" :key="bread.id" class="breads_card">
                 <div @click="setSelectedBread(bread)" class="image">
                     <img src="../assets/photoBreads/bulki.jpg" class="image_fit"/>
                 </div>
@@ -207,6 +226,8 @@
     data() {
       return {
         breads: [],
+        categorys: [],
+        showedBreads: [],
         name: '',
         price: '',
         recipe: '',
@@ -227,19 +248,30 @@
         mnoznik:1,
         waluta:'PLN',
         calkowitaSumaWaluta:0,
-        previewImage: null
+        previewImage: null,
+        selected: {
+                    categories: []
+                }
       }
     },
     created() {
         axios.get('http://localhost:3000/breads')
         .then(response => {
         this.breads = response.data;
+        this.showedBreads = response.data;
         })
         axios.get('http://localhost:3000/reviews')
         .then(response => {
         this.reviews = response.data;
         })
+        axios.get('http://localhost:3000/categorys')
+        .then(response => {
+        this.categorys = response.data;
+        })
+       
     },
+
+    
     methods: {
         selectImage(){
             this.$refs.fileInput.click()
@@ -277,7 +309,7 @@
             }
         },
         addBread() {
-            if (!isNaN(this.price)) {
+            if (!isNaN(this.price) && this.price > 0  && this.name !== "" && this.recipe !== "") {
                 axios.post('http://localhost:3000/breads', {
             name: this.name,
             price: this.price,
@@ -287,8 +319,10 @@
             .then(response => {
             this.breads.push(response.data);
             })
-            } else {
+            } else if (this.price > 0  && this.name !== "" && this.recipe !== "") {
                 alert("Popraw dane! Cena musi być numerem")
+            } else {
+                alert("Uzupełnij wszystkie pola poprawnymi wartościami")
             }
            
             },
@@ -375,6 +409,7 @@
             this.toCartBreadArray.push(breadCart);
             this.total=this.total+breadCart.suma;
             this.licznikCart++;
+            this.toCartBread = null;
             event.preventDefault();
             
             
@@ -418,13 +453,15 @@
 
         },
         sortBreads(order) {
-      if (order === 'asc') {
-        this.breads.sort((a, b) => a.price - b.price)
-      } else {
-        this.breads.sort((a, b) => b.price - a.price)
-      }
-    },
-
+            if (order === 'asc') {
+                this.breads.sort((a, b) => a.price - b.price)
+            } else {
+                this.breads.sort((a, b) => b.price - a.price)
+            }
+        },
+        filter() {
+            this.showedBreads = this.breads.filter(x => this.selected.categories.includes( x.categoryId))
+        }
     }
   }
 </script>
