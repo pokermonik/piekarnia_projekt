@@ -2,21 +2,34 @@
     <div>
 
         <div class="upbar">
-            <div class="logo">
-                <img src="../assets/logo.png" class="logo1"/>
-            </div>
-            <!-- kurs walut api -->
-            <div name="Waluta" class="waluta">
-                <label>   Wybierz walutę </label>
-                <select id="selectWaluta" ref="selectWaluta" @change="changeMnoznik($event)">
-                <option value="1">PLN</option>
-                <option value="2">USD</option>
-                <option value="3">GBP</option>
-                <option value="4">EUR</option>
-                <option value="5">CHF</option>
-                </select>
 
-            </div>
+
+                <div class="filtruj">
+                    <div v-for="category in categorys" :key="category.id" class="filtr">
+                        <input class="form-check-input" type="checkbox" :value="category.id" :id="category.id" v-model="selected.categories">    
+                        <!--  v-model="selected.prices" -->
+                        <label class="form-check-label" :for="category" style="border-color: #bb7900;">
+                            {{ category.name }}
+                        </label>
+                    </div>
+                    <div class="b-filtr">
+                    <button @click="filter" style="margin: 0 auto;">Filtruj</button>
+                    </div>
+                </div>
+                <div class="logo">
+                    <img src="../assets/logo.png" class="logo1"/>
+                </div>
+                    <!-- kurs walut api -->
+                <div name="Waluta" class="waluta">
+                    <label>   Wybierz walutę </label>
+                    <select id="selectWaluta" ref="selectWaluta" @change="changeMnoznik($event)">
+                    <option value="1">PLN</option>
+                    <option value="2">USD</option>
+                    <option value="3">GBP</option>
+                    <option value="4">EUR</option>
+                    <option value="5">CHF</option>
+                    </select>
+                </div>
         </div>
 
 
@@ -26,16 +39,7 @@
                 {{ price.name }} ({{ price.products_count }})
             </label>
         </div> -->
-        <div class="upbar">
-            <div v-for="category in categorys" :key="category.id" class="filtr">
-                <input class="form-check-input" type="checkbox" :value="category.id" :id="category.id" v-model="selected.categories">    
-                <!--  v-model="selected.prices" -->
-                <label class="form-check-label" :for="category">
-                    {{ category.name }}
-                </label>
-            </div>
-            <button @click="filter">Filtruj</button>
-        </div>
+       
         
 
         <!-- wszystkie karty z chlebkiem -->
@@ -166,52 +170,63 @@
                 <button @click="sortBreads('asc')">Sort by Price (Ascending)</button>
                 <button @click="sortBreads('desc')">Sort by Price (Descending)</button>
                 </div>
-        <div class="cart">
-            <div id="title">Koszyk</div>
-            <div id="content">
-                <table id="receipt" ref="receipt">
-                    <tr id="receiptRow">
-                        <td>    
-                            LP
-                        </td>
-                        <td class="Nazwa" style="text-align:center">
-                            NAZWA
-                        </td>
-                        <td class="Ilosc" style="text-align:center">
-                            ILOŚĆ
-                        </td>
-                        <td class="Cena" style="text-align:center">
-                            CENA
-                        </td>
-                        <td class="Suma" style="text-align:center">
-                            SUMA
-                        </td>
-                        
-                        
-                    </tr>
-                    <div v-for="bread in toCartBreadArray" :key="bread.id" style="text-align:center">
-                        <td>{{ bread.numerek }}</td>
-                        <td>{{ bread.name }}</td>
-                        <td>{{ bread.quantity }}</td>
-                        <td>{{ (bread.price/mnoznik).toFixed(2)}}</td>
-                        <td>{{ (bread.suma/mnoznik).toFixed(2)}}</td>
-                    </div>
-
-                    <tr id="totalCena">
-                        <td style="border:none"></td>
-                        <td style="border:none"></td>
-                        <td style="border:none"></td>
-                        <td style="text-align:center">
-                            RAZEM:
-                        </td>
-                        
+                <div class="cart">
+                <hr>
+                <div id="title" class="title_cart">Koszyk</div>
+                <div id="content">
+                <table class="content-table" id="receipt" ref="receipt">
+                    <thead>
+                        <tr id="receiptRow">
+                            <th>    
+                                LP
+                            </th>
+                            <th class="Nazwa" style="text-align:center">
+                                NAZWA
+                            </th>
+                            <th class="Ilosc" style="text-align:center">
+                                ILOŚĆ
+                            </th>
+                            <th class="Cena" style="text-align:center">
+                                CENA
+                            </th>
+                            <th class="Suma" style="text-align:center">
+                                SUMA
+                            </th>
+                            <th class="Action" style="text-align:center"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="bread in toCartBreadArray" :key="bread.id">
+                            <td>{{ bread.numerek }}</td>
+                            <td>{{ bread.name }}</td>
+                            <td>{{ bread.quantity }}</td>
+                            <td>{{ (bread.price/mnoznik).toFixed(2)}}</td>
+                            <td>{{ (bread.suma/mnoznik).toFixed(2)}}</td>
+                            <td>
+                                <button>
+                                    <font-awesome-icon icon="eraser" class="eraser"/>
+                                </button>
+                            </td>
+                        </tr>
+                    
+                        <tr class="total" id="totalCena">
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="border:none"></td>
+                            <td style="text-align:center">
+                                RAZEM:
+                            </td>
                             <td>{{ (this.total/mnoznik).toFixed(2)}}</td>
-                        
-        
-                    </tr>
+                            <td style="border:none"></td>
+                        </tr>
+                            
+            
+                    </tbody>
                 </table>
             </div>
           
+        
+        
         </div>
     </div>
     <footer>@Copyright Marek Chojnowski, Bartek Dawidziuk, Mateusz Węcławski, Grzegorz Denert 2023</footer>
@@ -467,9 +482,49 @@
 </script>
 
 <style>
+.filtr{
+    margin-top:5px;
+   
+}
+.b-filtr{
+    margin:0 auto;
+    padding-bottom: 30px;
+   
+}
+.filtruj{
+    padding-right: 100px;
+    width: 200px;
+    margin:auto 0;
+    position: absolute;
+    top: 15px;
+    z-index: 10;
+
+}
+.logo{
+    margin: 0 auto;
+    float:left;
+    padding-left: 43.73%;
+    position: absolute;
+    width: 150px;
+    height:150px;
+    padding-top:5px;
+}
+.logo1{
+    height:100%;
+    width: 100%;
+    padding: 5px;
+}
+.filtr{
+    clear:both;
+    
+}
+.form-check-input{
+    float:left;
+    border:none;
+    border-color: #bb7900;
+}
 .imagePreviewWrapper{
     border-radius: 25px 25px 0 0;  
-    
     
 }
 .punkty{
@@ -546,20 +601,7 @@ body{
     height: 80px;
     z-index: 8;
 }
-.logo{
-    margin: 0 auto;
-    float:left;
-    padding-left: 43.73%;
-    position: absolute;
-    width: 150px;
-    height:150px;
-    padding-top:5px;
-}
-.logo1{
-    height:100%;
-    width: 100%;
-    padding: 5px;
-}
+
 .waluta{
     background-color: #fff;
     float: right;
@@ -704,7 +746,7 @@ upbar{
 
 .cart{
     width: 100%;
-    background-color: #f7f5f1;
+    
     color:black;
     /* position:fixed;
     top:0;
@@ -712,7 +754,7 @@ upbar{
     height: 80px;
     z-index: 8; */
 }
-
+/* 
 
 #title, #content{
     margin: auto;
@@ -733,8 +775,8 @@ upbar{
     margin:auto;
     width:100%;
     table-layout: fixed;
-}
-.Nazwa{
+} */
+/* .Nazwa{
     
     text-align:left;
 }
@@ -754,7 +796,7 @@ upbar{
 
 #nowaPozycjaTable{
     border:none;
-}
+} */
 
 #c
 {
@@ -762,14 +804,14 @@ upbar{
     text-align:right;}
 
 
-table tr:not(:first-child)
+/* table tr:not(:first-child)
 {
     cursor: pointer;transition: all .25s ease-in-out;
 }
 table tr:not(:first-child):hover
 {
     background-color: #ddd;
-}
+} */
 
 #errorsHere{
     height: 20px;
@@ -831,5 +873,73 @@ footer{
   background-color:#e29f22;
   color: white;
 }
+
+/* tabelka koszyk */
+
+.content-table{
+    border-collapse: collapse;
+    margin: 15px auto 10px auto;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+}
+.content-table thead tr{
+    background-color:#e29f22;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+    /* opacity: 0.9; */
+}
+
+.title_cart{
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    font-size: 35px;
+}
+.content-table th,
+.content-table td {
+    padding: 12px 15px;
+}
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+    background-color: #fff;
+  transition: 0.3s;
+    /* opacity: 0.6; */
+}
+
+.content-table tbody tr:hover{
+    color: #e29f22;
+}
+.content-table tbody tr:hover:last-child{
+    color:#2c3e50;
+} 
+.content-table tbody tr:last-child{
+    border-bottom:none;
+}
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+    /* opacity: 0.5; */
+}
+.total{
+    border-top: 2px solid #e29f22;
+    
+}
+
+hr{
+    border: 1px solid #e29f22;
+    margin: 0 30px 0 30px;
+}
+.eraser{
+    color:#2c3e50;
+    transition: 0.3s;
+}
+.eraser:hover{
+    color:#dd0602;
+}
+/* ------------------ */
 
 </style>
