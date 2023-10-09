@@ -1,5 +1,6 @@
 # chlebek_projekt
-
+Strona internetowa typu single-page application przedstawiającą internetową piekarnię.
+Możliwe jest złożenie rachunku na różne rodzaje pieczywa w różnych walutach.
 ## Project setup
 ```
 npm install
